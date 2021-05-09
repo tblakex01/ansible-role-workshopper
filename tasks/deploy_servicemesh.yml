@@ -44,7 +44,7 @@
     state: present
     definition: "{{lookup('template','servicemesh/servicemesh.yaml.j2') | from_yaml }}"
     wait: yes
-  
+
 - name: "Wait for Red Hat Servicemesh Subscription"
   include_tasks: utils/wait_for_operator_and_sub.yml
   vars:
@@ -73,8 +73,7 @@
   community.kubernetes.k8s:
     state: present
     name: "{{item}}"
-  with_sequence: 
-    start="{{servicemesh_members.start}}" end="{{servicemesh_members.end}}" format="{{servicemesh_members.prefix}}%02x"
+  with_sequence: start="{{servicemesh_members.start}}" end="{{servicemesh_members.end}}" format="{{servicemesh_members.prefix}}%02x"
   when: servicemesh_members.create
 
 - name: Add Projects to Servicemesh Member Roll
@@ -86,4 +85,3 @@
     wait_condition:
       type: Ready
   when: servicemesh_members.create
-  

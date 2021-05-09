@@ -11,24 +11,23 @@
 
 - name: Generate Htpass file
   htpasswd:
-      path: "{{workshopper_home}}/{{cloud_profile}}/htpass.users"
-      name: "{{item}}"
-      password: "{{user_password}}"
-  with_sequence:
-    start="{{users.start}}" end="{{users.end}}" format="{{users.prefix}}%02x"
- 
+    path: "{{workshopper_home}}/{{cloud_profile}}/htpass.users"
+    name: "{{item}}"
+    password: "{{user_password}}"
+  with_sequence: start="{{users.start}}" end="{{users.end}}" format="{{users.prefix}}%02x"
+
 - name: Add OpenShift Admin user
   htpasswd:
-      path: "{{workshopper_home}}/{{cloud_profile}}/htpass.users"
-      name: "{{users.ocpadmin_username}}"
-      password: "{{ocpadmin_password}}"
+    path: "{{workshopper_home}}/{{cloud_profile}}/htpass.users"
+    name: "{{users.ocpadmin_username}}"
+    password: "{{ocpadmin_password}}"
 
 - name: Remove  {{htpasswdidp_secret_name}} if it exists"
   community.kubernetes.k8s:
-    state: absent    
+    state: absent
     api_version: v1
     kind: Secret
-    name:  "{{htpasswdidp_secret_name}}"
+    name: "{{htpasswdidp_secret_name}}"
     namespace: openshift-config
 
 - name: "Create  {{htpasswdidp_secret_name}}"
@@ -56,12 +55,12 @@
         namespace: openshift-config
       spec:
         identityProviders:
-         - name: "{{htpasswdidp_name}}"
-           type: HTPasswd
-           mappingMethod: claim 
-           htpasswd:
-             fileData:
-               name: "{{htpasswdidp_secret_name}}"
+          - name: "{{htpasswdidp_name}}"
+            type: HTPasswd
+            mappingMethod: claim
+            htpasswd:
+              fileData:
+                name: "{{htpasswdidp_secret_name}}"
 
 - name: Wait for the Auth provider rollout
   pause:
@@ -79,14 +78,14 @@
         kind: ClusterRole
         name: cluster-admin
       subjects:
-      - apiGroup: rbac.authorization.k8s.io
-        kind: User
-        name: ocpadmin
+        - apiGroup: rbac.authorization.k8s.io
+          kind: User
+          name: ocpadmin
 
 - name: "Remove default kubeadmin user"
   community.kubernetes.k8s:
-    state: absent    
+    state: absent
     api_version: v1
     kind: Secret
-    name:  "kubeadmin"
+    name: "kubeadmin"
     namespace: kube-system

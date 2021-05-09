@@ -1,4 +1,4 @@
----   
+---
 - name: Make sure destination exists
   file:
     path: "{{item}}"
@@ -57,7 +57,7 @@
     mode: 0755
     exclude:
       - "README.md"
-  with_fileglob: 
+  with_fileglob:
     - /tmp/openshift/*.tar.gz
   tags:
     - download

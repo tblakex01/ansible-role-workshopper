@@ -10,24 +10,24 @@
   retries: 18
   delay: 10
 
-- name: "{{sub_name}} CSV Status" 
+- name: "{{sub_name}} CSV Status"
   debug: msg="{{sub_csv_status}}"
   tags:
-   - debug
-   - verbose
+    - debug
+    - verbose
 
 - set_fact:
     sub_installed_csv: "{{sub_csv_status.resources[0].status.installedCSV}}"
 
 - debug: msg="{{subscription_name}} CSV {{sub_installed_csv}}"
   tags:
-   - debug
-   - verbose
+    - debug
+    - verbose
 
 - name: "Wait for CSV '{{sub_installed_csv}}' to be ready"
   community.kubernetes.k8s_info:
     api_version: operators.coreos.com/v1alpha1
-    kind:  ClusterServiceVersion
+    kind: ClusterServiceVersion
     name: "{{sub_installed_csv}}"
     namespace: "{{sub_namedspace|default('openshift-operators')}}"
   register: sub_installed_csv_status
@@ -35,8 +35,8 @@
   retries: 18
   delay: 10
 
-- name: "Installed CSV {{sub_installed_csv}}  Status" 
+- name: "Installed CSV {{sub_installed_csv}}  Status"
   debug: msg="{{sub_installed_csv_status}}"
   tags:
-   - debug
-   - verbose
+    - debug
+    - verbose
