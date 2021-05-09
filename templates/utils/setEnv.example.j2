@@ -6,7 +6,7 @@ _CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 export CONFIGS_DIR="$_CURR_DIR/../config"
 export WORK_DIR="$_CURR_DIR/../work"
 
-# set kubeconfig file to allow system:admin login 
+# set kubeconfig file to allow system:admin login
 export KUBECONFIG=${KUBECONFIG:-''}
 # Openshift user with cluster admin role
 export OPENSHIFT_ADMIN_USER=''
@@ -14,20 +14,20 @@ export OPENSHIFT_ADMIN_USER=''
 export OPENSHIFT_ADMIN_USER_PASSWORD=''
 # Openshift server API URL
 export OPENSHIFT_API_URL=''
-# OpenShift Domain Suffix 
+# OpenShift Domain Suffix
 export OPENSHIFT_DOMAIN_SUFFIX=''
 # Openshift User default password
 export WORKSHOP_USER_DEFAULT_PASSWORD=''
 
 ### START CHE SETTINGS
 if [ $(kubectl get ns che &>/dev/null) ];
-then   
- # The Che URL
- export CHE_URL="http://$(oc get routes -n che che -o yaml | yq r - 'spec.host')"
- # The Che Keycloak URL
- export CHE_KEYCLOAK_URL="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
- # The DEVFILE to use for workshop, it could be relative path or raw github path
- export WORKSHOP_DEVFILE_URL=''
+then
+# The Che URL
+export CHE_URL="http://$(oc get routes -n che che -o yaml | yq r - 'spec.host')"
+# The Che Keycloak URL
+export CHE_KEYCLOAK_URL="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+# The DEVFILE to use for workshop, it could be relative path or raw github path
+export WORKSHOP_DEVFILE_URL=''
 fi
 ### END CHE SETTINGS
 

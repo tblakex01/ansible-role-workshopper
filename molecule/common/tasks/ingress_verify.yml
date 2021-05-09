@@ -6,16 +6,16 @@
     namespace: "{{ingress_namespace}}"
   register: ingress_deployments
   when: deploy_ingress
-   
+
 #  - debug: msg="{{item.status}}"
-#    with_items: 
+#    with_items:
 #     - "{{ingress_deployments.resources}}"
-        
+
 - name: Ensure all Ingress Deployments are running
   assert:
     that: "(item.status.availableReplicas == item.status.replicas) and ((item.status.availableReplicas == item.status.readyReplicas))"
-  with_items: 
-  - "{{ingress_deployments.resources}}"
+  with_items:
+    - "{{ingress_deployments.resources}}"
 
 - name: Create Test namespace
   k8s:
@@ -27,7 +27,7 @@
   k8s:
     state: present
     namespace: molecule-ingress-test
-    definition: "{{lookup('file','../myapp/deployment.yaml')}}"        
+    definition: "{{lookup('file','../myapp/deployment.yaml')}}"
     wait: yes
     wait_sleep: 5
     wait_timeout: 180
@@ -36,18 +36,18 @@
   k8s:
     state: present
     namespace: molecule-ingress-test
-    definition: "{{lookup('file','../myapp/service.yaml')}}"  
-    
-- name: Deploy Test Ingress myApp 
+    definition: "{{lookup('file','../myapp/service.yaml')}}"
+
+- name: Deploy Test Ingress myApp
   k8s:
     state: present
     namespace: molecule-ingress-test
-    definition: "{{lookup('file','../myapp/ingress.yaml')}}" 
+    definition: "{{lookup('file','../myapp/ingress.yaml')}}"
     wait: yes
     wait_sleep: 5
     wait_timeout: 180
 
-- name: Invoke the myApp Service 
+- name: Invoke the myApp Service
   uri:
     url: http://myapp.molecule-ingress-test.127.0.0.1.nip.io/api/hello
     return_content: yes
